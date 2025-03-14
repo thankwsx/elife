@@ -1,3 +1,5 @@
+import ReactMarkdown from 'react-markdown';
+
 type DiaryEntity = {
   id: string;
   title: string;
@@ -21,9 +23,12 @@ export default async function DiaryList() {
               <h2 className="text-lg font-semibold text-gray-900">
                 {diary.title}
               </h2>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                {diary.content}
-              </p>
+<ReactMarkdown components={{
+  p: (props) => <p className="text-sm text-gray-700 whitespace-pre-wrap" {...props} />,
+}}>
+  {diary.content}
+</ReactMarkdown>
+{/* Remove the unused button */}
             </div>
           );
         })}
@@ -31,3 +36,5 @@ export default async function DiaryList() {
     </div>
   );
 }
+
+// Remove the unused openEditor function and DiaryEditor reference
