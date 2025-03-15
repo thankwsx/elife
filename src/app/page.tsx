@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import ReactMarkdown from 'react-markdown';
 
 type ArticleEntity = {
@@ -28,12 +26,11 @@ export default async function Home() {
               <h2 className="text-lg font-semibold text-gray-900">
                 {diary.title}
               </h2>
-<ReactMarkdown components={{
-  p: (props) => <p className="text-sm text-gray-700 whitespace-pre-wrap" {...props} />,
-}}>
-  {diary.blocks[0]?.body}
-</ReactMarkdown>
-{/* Remove the unused button */}
+              <ReactMarkdown components={{
+                p: (props) => <p className="text-sm text-gray-700 whitespace-pre-wrap" {...props} />,
+              }}>
+                {diary.blocks[0]?.body}
+              </ReactMarkdown>
             </div>
           );
         })}

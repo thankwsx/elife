@@ -1,14 +1,7 @@
 "use client";
 
-import { useState } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-
-type DiaryEntity = {
-  id: string;
-  title: string;
-  content: string;
-};
 
 const DiaryEditor = ({ initialContent }: { initialContent: string }) => {
   const editor = useEditor({
