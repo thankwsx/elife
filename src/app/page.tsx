@@ -6,6 +6,9 @@ type ArticleEntity = {
   id: string;
   title: string;
   content: string;
+  blocks: {
+    body: string;
+  }[];
 };
 
 export default async function Home() {
@@ -28,7 +31,7 @@ export default async function Home() {
 <ReactMarkdown components={{
   p: (props) => <p className="text-sm text-gray-700 whitespace-pre-wrap" {...props} />,
 }}>
-  {diary.blocks[0].body}
+  {diary.blocks[0]?.body}
 </ReactMarkdown>
 {/* Remove the unused button */}
             </div>
