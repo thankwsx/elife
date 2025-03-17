@@ -7,8 +7,9 @@ type DiaryEntity = {
 };
 
 export default async function DiaryList() {
+  // 修改为只取最新的一条日记，没必要展示那么多
   const resp = await fetch(
-    "https://strapi.jackyqi.cn/api/diarys?sort=title:desc"
+    "https://strapi.jackyqi.cn/api/diarys?sort=title:desc&pagination[pageSize]=1&pagination[page]=1"
   );
   const diaryList = await resp.json();
   return (
