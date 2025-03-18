@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={'antialiased max-w-screen-sm mx-auto'}
+        className={'antialiased mx-auto'}
       >
         {children}
       </body>
