@@ -1,4 +1,7 @@
+'use client';
+
 import ReactMarkdown from 'react-markdown';
+import { useState, useEffect } from 'react';
 
 type DiaryEntity = {
   id: string;
@@ -6,12 +9,48 @@ type DiaryEntity = {
   content: string;
 };
 
-export default async function DiaryList() {
-  // 修改为只取最新的一条日记，没必要展示那么多
-  const resp = await fetch(
-    "https://strapi.jackyqi.cn/api/diarys?sort=title:desc&pagination[pageSize]=1&pagination[page]=1"
-  );
-  const diaryList = await resp.json();
+export default function DiaryList() {
+  const [diaryList, setDiaryList] = useState<{ data: DiaryEntity[] }>({ data: [] });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDiaries = async () => {
+      try {
+        const resp = await fetch(
+          "https://strapi.jackyqi.cn/api/diarys?sort=title:desc&pagination[pageSize]=1&pagination[page]=1"
+        );
+        if (!resp.ok) {
+          throw new Error('网络请求失败');
+        }
+        const data = await resp.json();
+        setDiaryList(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '获取日记失败');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDiaries();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen p-8 pb-20 sm:p-20 flex items-center justify-center">
+        <div className="text-gray-600">加载中...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen p-8 pb-20 sm:p-20 flex items-center justify-center">
+        <div className="text-red-600">{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="grid grid-cols-1 gap-8">
@@ -24,12 +63,11 @@ export default async function DiaryList() {
               <h2 className="text-lg font-semibold text-gray-900">
                 {diary.title}
               </h2>
-<ReactMarkdown components={{
-  p: (props) => <p className="text-sm text-gray-700 whitespace-pre-wrap" {...props} />,
-}}>
-  {diary.content}
-</ReactMarkdown>
-{/* Remove the unused button */}
+              <ReactMarkdown components={{
+                p: (props) => <p className="text-sm text-gray-700 whitespace-pre-wrap" {...props} />,
+              }}>
+                {diary.content}
+              </ReactMarkdown>
             </div>
           );
         })}
@@ -37,5 +75,3 @@ export default async function DiaryList() {
     </div>
   );
 }
-
-// Remove the unused openEditor function and DiaryEditor reference

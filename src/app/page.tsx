@@ -1,4 +1,7 @@
+'use client';
+
 import ReactMarkdown from 'react-markdown';
+import { useState, useEffect } from 'react';
 
 type ArticleEntity = {
   id: string;
@@ -9,11 +12,48 @@ type ArticleEntity = {
   }[];
 };
 
-export default async function Home() {
-  const resp = await fetch(
-    "https://strapi.jackyqi.cn/api/articles?sort=createdAt:desc&populate=*"
-  );
-  const articleList = await resp.json();
+export default function Home() {
+  const [articleList, setArticleList] = useState<{ data: ArticleEntity[] }>({ data: [] });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const resp = await fetch(
+          "https://strapi.jackyqi.cn/api/articles?sort=createdAt:desc&populate=*"
+        );
+        if (!resp.ok) {
+          throw new Error('网络请求失败');
+        }
+        const data = await resp.json();
+        setArticleList(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '获取文章失败');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen p-8 pb-20 sm:p-20 flex items-center justify-center">
+        <div className="text-gray-600">加载中...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen p-8 pb-20 sm:p-20 flex items-center justify-center">
+        <div className="text-red-600">{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="grid grid-cols-1 gap-8">
