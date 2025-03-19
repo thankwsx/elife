@@ -21,7 +21,7 @@ export default function Home() {
     const fetchArticles = async () => {
       try {
         const resp = await fetch(
-          "https://strapi.jackyqi.cn/api/articles?sort=createdAt:desc&populate=*"
+          "https://strapi.jackyqi.cn/api/articles?sort=updatedAt:desc&populate=*"
         );
         if (!resp.ok) {
           throw new Error('网络请求失败');
