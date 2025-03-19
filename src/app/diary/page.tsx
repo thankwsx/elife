@@ -7,6 +7,7 @@ type DiaryEntity = {
   id: string;
   title: string;
   content: string;
+  updatedAt: string;
 };
 
 export default function DiaryList() {
@@ -63,6 +64,15 @@ export default function DiaryList() {
               <h2 className="text-lg font-semibold text-gray-900">
                 {diary.title}
               </h2>
+              <div className="text-sm text-gray-500">
+                {new Date(diary.updatedAt).toLocaleString('zh-CN', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </div>
               <ReactMarkdown components={{
                 p: (props) => <p className="text-sm text-gray-700 whitespace-pre-wrap" {...props} />,
               }}>
